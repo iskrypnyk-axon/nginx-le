@@ -30,6 +30,9 @@ services:
             - LETSENCRYPT=true
             - LE_EMAIL=name@example.com
             - LE_FQDN=www.example.com
+            - AWS_INTEGRATED=false
+            - AWS_REGION=eu-central-1
+            - AWS_SG=sg-0435ecec8b1caa3e3
             #- SSL_CERT=le-crt.pem
             #- SSL_KEY=le-key.pem
             #- SSL_CHAIN_CERT=le-chain-crt.pem
