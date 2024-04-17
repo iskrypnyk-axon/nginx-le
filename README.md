@@ -10,6 +10,22 @@ Simple nginx image (alpine based) with integrated [Let's Encrypt](https://letsen
   - `LE_EMAIL` should be your email and `LE_FQDN` for domain
   - for multiple FQDNs you can pass comma-separated list, like `LE_FQDN=aaa.example.com,bbb.example.com`
   - alternatively set `LETSENCRYPT` to `false` and pass your own cert in `SSL_CERT`, key in `SSL_KEY` and `SSL_CHAIN_CERT`
+  - alternatively set `AWS_INTEGRATED` to `true` and define parameters `AWS_REGION` and `AWS_SG_ID`. It needed if you want to allow add and renewal certbot process behind AWS EC2 Instance with Security group attached. You also need IAM role attached to your EC2 instance which allows modify Security Group.
+  ```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:AuthorizeSecurityGroupIngress"
+            ],
+            "Resource": "arn:aws:ec2:${AWS_REGION}:${AWS_ACCOUNT}:security-group/${AWS_SG_ID}"
+        }
+    ]
+  }
+  ```
   - use provided `etc/service-example.conf` to make your own `etc/service.conf`. Keep ssl directives as is:
     ```nginx
     ssl_certificate SSL_CERT;
@@ -55,6 +71,10 @@ variable with dollar sign (`$`, like `$LE_FQDN`) will be taken from environment,
 | LE_FQDN     | | comma-separated list of domains for Let's Encrypt certificate, required if `LETSENCRYPT` is `true` |
 | LE_EMAIL    | | comma-separated list of emails for Let's Encrypt certificate, required if `LETSENCRYPT` is `true` |
 | TZ          | | Timezone, if set will be written to container's `/etc/timezone` |
+| AWS_INTEGRATED | false | Enables script which add allow EC2 SG rule for certbot access to 80 port |
+| AWS_REGION     | | AWS Region where EC2 Instance located, required if `AWS_INTEGRATED` is `true` |
+| AWS_SG_ID      | | AWS Security Group attached to EC2 Instance, required if `AWS_INTEGRATED` is `true` |
+
 
 ## Some implementation details
 

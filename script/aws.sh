@@ -8,12 +8,12 @@ if [ "${AWS_INTEGRATED}" == "true" ]; then
         apk add --no-cache aws-cli && echo "aws-cli installed"
     fi
     
-    if [ "$1" == "add" ] && [ ! -z "${AWS_REGION}" ] && [ ! -z "${AWS_SG}" ]; then
-        aws ec2 authorize-security-group-ingress --region ${AWS_REGION} --group-id "${AWS_SG}" --protocol tcp --port 80 --cidr "0.0.0.0/0" --output text
+    if [ "$1" == "add" ] && [ ! -z "${AWS_REGION}" ] && [ ! -z "${AWS_SG_ID}" ]; then
+        aws ec2 authorize-security-group-ingress --region ${AWS_REGION} --group-id "${AWS_SG_ID}" --protocol tcp --port 80 --cidr "0.0.0.0/0" --output text
     fi
 
-    if [ "$1" == "del" ] && [ ! -z "${AWS_REGION}" ] && [ ! -z "${AWS_SG}" ]; then
-        aws ec2 revoke-security-group-ingress --region ${AWS_REGION} --group-id "${AWS_SG}" --protocol tcp --port 80 --cidr "0.0.0.0/0" --output text
+    if [ "$1" == "del" ] && [ ! -z "${AWS_REGION}" ] && [ ! -z "${AWS_SG_ID}" ]; then
+        aws ec2 revoke-security-group-ingress --region ${AWS_REGION} --group-id "${AWS_SG_ID}" --protocol tcp --port 80 --cidr "0.0.0.0/0" --output text
     fi
 else
     echo "aws integration disabled"
