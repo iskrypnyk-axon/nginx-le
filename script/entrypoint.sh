@@ -66,7 +66,9 @@ mv -v /etc/nginx/stream.d /etc/nginx/stream.d.disabled
  echo "start letsencrypt updater"
  while :; do
     echo "trying to update letsencrypt ..."
+    /aws.sh add
     /le.sh
+    /aws.sh del
     #on the first run remove default config, conflicting on 80
     rm -f /etc/nginx/conf.d/default.conf 2>/dev/null
     #on the first run enable config back
